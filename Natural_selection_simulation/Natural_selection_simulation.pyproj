@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a5225657-6600-409c-84df-4738f6ba76ff</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Natural_selection_simulation.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Natural_selection_simulation.py" />
+    <Compile Include="carrot.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="colors.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
