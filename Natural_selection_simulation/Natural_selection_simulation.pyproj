@@ -24,7 +24,7 @@
     <Compile Include="carrot.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="colors.py">
+    <Compile Include="colours.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
