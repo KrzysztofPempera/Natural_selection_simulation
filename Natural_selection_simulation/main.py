@@ -19,7 +19,7 @@ pg.display.set_caption('Simulation')
 
 # set up food and rabbit
 food = [crt.carrot(screen, 1, WIDTH - 20, 1, HEIGHT - 20) for i in range (200)]
-rabbit = rb.rabbit(screen, 200, 200, 1)
+rabbit = rb.rabbit(screen, 200, 200, 3)
 
 # draw grid 
 #def drawGrid(surface, rows, width):

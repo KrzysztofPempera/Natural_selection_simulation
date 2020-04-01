@@ -31,7 +31,7 @@ class rabbit(object):
 
     # choose wandering direction
     def wander(self):
-        return rnd.randint(1,4)
+        return rnd.randint(0,3)
 
     # move rabbit
     def move(self):
