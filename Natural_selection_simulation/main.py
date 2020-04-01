@@ -20,8 +20,9 @@ screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
 # set up food and rabbit
-food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (50)]
-rabbit = rb.rabbit(screen, 200, 200, 1)
+#food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (50)]
+food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
+rabbit = rb.rabbit(screen, 200, 200, 3)
 
 # draw grid 
 #def drawGrid(surface, rows, width):
@@ -69,7 +70,7 @@ while running:
     # move rabbits
     rabbit.move()
     if rabbit.isWandering() == True:
-        rabbit.search(food)
+        rabbit.seek(food)
 
     #for carrot in food:
     #    if rabbit.getPosition() == carrot.getPosition():
