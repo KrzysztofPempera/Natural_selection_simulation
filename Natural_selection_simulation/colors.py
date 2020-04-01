@@ -6,4 +6,5 @@ BLUE       = (0,0,255)
 BLUE_DARK  = (0,0,150)
 WHITE      = (255,255,255)
 BLACK      = (0,0,0)
-
+ORANGE     = (255,165,0)
+ORANGE_DARK = (255,140,0)

@@ -4,7 +4,7 @@ from colors import *
 
 
 # block size
-BLOCK_SIZE = 20
+BLOCK_SIZE = 10
 
 # carrot class definition
 class carrot(object):
@@ -15,7 +15,7 @@ class carrot(object):
         self.posX = rnd.randint(minX, maxX - 1)
         self.posY = rnd.randint(minY, maxY - 1)
 
-        self.colour = RED
+        self.colour = ORANGE
 
     def getPosition(self):
         return (self.posX, self.posY)
@@ -26,6 +26,7 @@ class carrot(object):
 
     def draw(self):
         sur = self.surface
+
         cPosition = self.getPosition()
 
         pg.draw.rect(sur,self.colour,(cPosition[0],cPosition[1],BLOCK_SIZE,BLOCK_SIZE))

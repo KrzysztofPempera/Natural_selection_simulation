@@ -7,9 +7,6 @@ WIDTH      = 400
 HEIGHT     = 400
 SPEED      = 8
 SPEED_TICK = 2
-SPEED_INC  = 5
-SHORT      = 12
-LONG       = 1
 ROWS       = 20
 
 pg.init()
@@ -20,7 +17,7 @@ screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
 # set up food and rabbit
-food = crt.carrot(screen, 1, WIDTH - 20, 1, HEIGHT - 20)
+food = [crt.carrot(screen, 1, WIDTH - 20, 1, HEIGHT - 20) for i in range (50)]
 
 # draw grid 
 #def drawGrid(surface, rows, width):
@@ -36,34 +33,26 @@ food = crt.carrot(screen, 1, WIDTH - 20, 1, HEIGHT - 20)
 #        pg.draw.line(surface, (WHITE), (x,0),(x,width))
 #        pg.draw.line(surface, (WHITE), (0,y),(width,y))
 
-#def drawScreen(surface, rows, width):
-
-#    surface.fill(BLACK)
-#    drawGrid(surface, rows, width)
-#    pg.display.flip()  
-#    pg.display.update()
-screen.fill(GREEN_DARK)
-pg.display.flip()
+# draw screen with objects 
+def drawScreen(surface):
+    surface.fill(GREEN_DARK)
+    for i in range(len(food)):
+        food[i].draw()
+    pg.display.flip()  
+    pg.display.update()
 
 running = True
 while running:
-    
+  
     #game speed
     clock.tick(SPEED)
 
     #draw food, rabbit, screen
-    #drawScreen(screen, ROWS, WIDTH)
-    food.draw()
+    drawScreen(screen)
 
-    pg.draw.rect(screen,RED,(1,1,20,20))
-    pg.display.update()
-    screen.fill(GREEN_DARK)
-    food.move()
     # quit
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False 
             pg.quit()
-
-    print("loop")
 
