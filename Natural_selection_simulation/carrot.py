@@ -17,10 +17,11 @@ class carrot(object):
 
         self.colour = ORANGE
 
+    # get carrots position
     def getPosition(self):
         return (self.posX, self.posY)
 
-
+    # draw carrot
     def draw(self):
         sur = self.surface
 
