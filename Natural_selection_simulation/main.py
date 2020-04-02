@@ -6,7 +6,8 @@ from colours import *
 # screen size and game speed
 WIDTH      = 400
 HEIGHT     = 400
-SPEED      = 200
+SPEED      = 50
+MOVEMENT_SPEED = 2
 
 # declare food positions array
 foodPositionX = []
@@ -20,9 +21,9 @@ screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
 # set up food and rabbit
-#food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (50)]
-food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
-rabbit = rb.rabbit(screen, 200, 200, 3)
+food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (800)]
+#food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
+rabbit = rb.rabbit(screen, 200, 200, MOVEMENT_SPEED)
 
 # draw grid 
 #def drawGrid(surface, rows, width):
@@ -60,22 +61,20 @@ while running:
     # draw food, rabbit, screen
     drawScreen(screen)
 
-    #del foodPositionX[:]
-    #del foodPositionY[:]
-    #for carrot in food:
-    #    rPosition = carrot.getPosition()
-    #    foodPositionX.append(rPosition[0])
-    #    foodPositionY.append(rPosition[1])
-
     # move rabbits
     rabbit.move()
     if rabbit.isWandering() == True:
         rabbit.seek(food)
 
-    #for carrot in food:
-    #    if rabbit.getPosition() == carrot.getPosition():
-    #        food.remove(carrot)
-    #        print('deleted')
+    #if rabbit.eat == True:
+    #    food.remove(food[rabbit.getPosition()])
+    #    rabbit.eat = False
+    #    print('deleted')
+
+    for carrot in food:
+        if rabbit.getPosition() == carrot.getPosition():
+            food.remove(carrot)
+            print('deleted')
 
     # quit
     for event in pg.event.get():

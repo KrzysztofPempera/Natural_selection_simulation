@@ -15,7 +15,7 @@ DOWN  = 2
 LEFT  = 3
 
 # sense radius
-SENSE = 5
+SENSE = 15
 
 # rabbit class definition
 class rabbit(object):
@@ -27,7 +27,7 @@ class rabbit(object):
         self.posY = startPosY
         self.ms = movementspeed
         self.wandering = True
-        self.target = None
+        self.eat = False
         self.path = []
         self.targetDistance = 0
 
@@ -52,6 +52,7 @@ class rabbit(object):
 
         if self.wandering == False:
             self.path = self.createPath(self.closest)
+            self.path.reverse()
         elif self.wandering == True:
             return print('searching')
 
@@ -67,56 +68,46 @@ class rabbit(object):
             if self.targetDistance <= SENSE:
                 self.wandering = False
                 return cPositionX,cPositionY
-    
-    def tempName(self, direction):
-        if direction == UP:
-            return 0,-self.ms
-        elif direction == RIGHT:
-            return self.ms,0
-        elif direction == DOWN:
-            return 0, self.ms
-        elif direction == LEFT:
-            return -self.ms,0
-
-
+   
+    # more elegant currentDistance()
     def heuristic(self,a, b):
         return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
 
     # create path to set destination
     def createPath(self, destination):
         moves  = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
-        close_set = set()
-        came_from = {}
-        start = list(self.getPosition())
-        goal = list(destination)
-        gscore = {self.getPosition():0}
-        fscore = {self.getPosition():self.heuristic(start,goal)}
+        visited = set()
+        currentPath = {}
+        # movement cost from starting node to current/potential node
+        gScore = {self.getPosition():0}
+        # score for each node
+        fScore = {self.getPosition():self.heuristic(self.getPosition(),destination)}
         oheap = []
-        heapq.heappush(oheap,(fscore[self.getPosition()],self.getPosition()))
+        heapq.heappush(oheap,(fScore[self.getPosition()],self.getPosition()))
+
         while oheap:
             current = heapq.heappop(oheap)[1]
             if current == destination:
                 data = []
-                while current in came_from:
+                while current in currentPath:
                     data.append(current)
-                    current = came_from[current]
+                    current = currentPath[current]
                 return data
-            close_set.add(current)
+            visited.add(current)
 
             for i,j in moves:
                 move = current[0] + i, current[1] + j
-                tennative_g_score = gscore [current] + self.heuristic(current,move)
-                if move in close_set and tennative_g_score >= gscore.get(move,0):
+                tempGScore = gScore [current] + self.heuristic(current,move)
+                if move in visited and tempGScore >= gScore.get(move,0):
                     continue
-                if tennative_g_score < gscore.get(move,0) or move not in [i[1]for i in oheap]:
-                    came_from[move] = current
-                    gscore[move] = tennative_g_score
-                    fscore[move] = tennative_g_score + self.heuristic(move,destination)
-                    heapq.heappush(oheap,(fscore[move],move))
-        return False
+                if tempGScore < gScore.get(move,0) or move not in [i[1]for i in oheap]:
+                    currentPath[move] = current
+                    gScore[move] = tempGScore
+                    fScore[move] = tempGScore + self.heuristic(move,destination)
+                    heapq.heappush(oheap,(fScore[move],move))
 
 
-    #def createPath(self, destination):
+    #def createPathbts(self, destination):
     #    visited = set([destination])
     #    tempQ = collections.deque([[self.getPosition()]])
     #    while tempQ:
@@ -143,24 +134,30 @@ class rabbit(object):
             # check wandering direction
             if self.dir == UP:
                 self.posY -= self.ms
+                self.posY = self.posY % 400
             elif self.dir == RIGHT:
                 self.posX += self.ms
+                self.posX = self.posX % 400
             elif self.dir == DOWN:
                 self.posY += self.ms
+                self.posY = self.posY % 400
             elif self.dir == LEFT:
                 self.posX -= self.ms
+                self.posX = self.posX % 400
         elif self.wandering == False:
-            self.path.append(self.getPosition())
-            self.path.reverse()
-            print(self.path)
-            self.wandering = True
-
+            if self.path:
+                self.nextMove = self.path.pop(0)
+                self.posX = self.nextMove[0]
+                self.posY = self.nextMove[1]
+            else:
+                self.eat = True
+                self.wandering = True
         
         # fix out of bounds behavior
-        if self.posX >= 400:
-            self.posX = self.posX - 400
-        if self.posY >= 400:
-            self.posY = self.posY - 400
+        #if self.posX >= 400:
+        #    self.posX = self.posX - 400
+        #if self.posY >= 400:
+        #    self.posY = self.posY - 400
 
     # draw rabbit    
     def draw(self):
