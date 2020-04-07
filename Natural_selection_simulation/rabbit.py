@@ -40,11 +40,11 @@ class rabbit(object):
 
     # get rabbits position
     def getPosition(self):
-        return (self.posX, self.posY)
+        return self.posX, self.posY
 
     # get rabbits status
-    def isWandering(self):
-        return(self.wandering)
+    def getWandering(self):
+        return self.wandering
 
     #find nearest food
     def seek(self, food):
@@ -54,8 +54,7 @@ class rabbit(object):
             self.path = self.createPath(self.closest)
             self.path.reverse()
         elif self.wandering == True:
-            return print('searching')
-
+            print("searching..")
     # scan for closest food
     def scan(self, food):
 
@@ -68,6 +67,7 @@ class rabbit(object):
             if self.targetDistance <= SENSE:
                 self.wandering = False
                 return cPositionX,cPositionY
+        return
    
     # more elegant currentDistance()
     def heuristic(self,a, b):
@@ -144,6 +144,7 @@ class rabbit(object):
             elif self.dir == LEFT:
                 self.posX -= self.ms
                 self.posX = self.posX % 400
+
         elif self.wandering == False:
             if self.path:
                 self.nextMove = self.path.pop(0)

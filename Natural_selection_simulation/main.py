@@ -21,23 +21,10 @@ screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
 # set up food and rabbit
-food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (800)]
+food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
 #food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
-rabbit = rb.rabbit(screen, 200, 200, MOVEMENT_SPEED)
-
-# draw grid 
-#def drawGrid(surface, rows, width):
-#    gridSize = 20
-
-#    x = 0
-#    y = 0
-
-#    for i in range(rows):
-#        x = x + gridSize
-#        y = y + gridSize
-
-#        pg.draw.line(surface, (WHITE), (x,0),(x,width))
-#        pg.draw.line(surface, (WHITE), (0,y),(width,y))
+#rabbits = [rb.rabbit(screen, 200, 200, MOVEMENT_SPEED) for i in range (10)]
+rabbits = [rb.rabbit(screen, 200, 200, MOVEMENT_SPEED) for i in range (5)]
 
 # draw screen with objects 
 def drawScreen(surface):
@@ -45,12 +32,10 @@ def drawScreen(surface):
 
     for i in range(len(food)):
         food[i].draw()
-
-    rabbit.draw()
-    rabbit.scan(food)
+    for i in range(len(rabbits)):
+        rabbits[i].draw()
 
     pg.display.flip()  
-    pg.display.update()
 
 running = True
 while running:
@@ -62,19 +47,21 @@ while running:
     drawScreen(screen)
 
     # move rabbits
-    rabbit.move()
-    if rabbit.isWandering() == True:
-        rabbit.seek(food)
+    for i in range(len(rabbits)):
+        rabbits[i].move()
+        if rabbits[i].getWandering() == True:
+            rabbits[i].seek(food)
 
     #if rabbit.eat == True:
     #    food.remove(food[rabbit.getPosition()])
     #    rabbit.eat = False
     #    print('deleted')
-
+    #eating to fix
     for carrot in food:
-        if rabbit.getPosition() == carrot.getPosition():
-            food.remove(carrot)
-            print('deleted')
+        for rabbit in rabbits:
+            if rabbit.getPosition() == carrot.getPosition():
+                food.remove(carrot)
+                print('deleted')
 
     # quit
     for event in pg.event.get():
