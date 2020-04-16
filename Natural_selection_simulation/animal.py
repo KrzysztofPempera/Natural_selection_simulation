@@ -93,7 +93,7 @@ class animal(object):
             return self.wander()
             
     def getNewPosition(self, position):
-        moves = ((0,1),(0,-1),(1,0),(-1,0))
+        moves = ((0,self.ms),(0,-self.ms),(self.ms,0),(-self.ms,0))
         nextMove = moves[rnd.randint(0,3)]
         newPosition = (position[0] + nextMove[0],position[1] + nextMove[1])
         return newPosition

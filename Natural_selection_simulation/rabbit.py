@@ -1,13 +1,8 @@
 import pygame as pg
+import math
+
 from animal import animal
 from colours import *
-
-
-# motion direction constants
-UP    = 0
-RIGHT = 1
-DOWN  = 2
-LEFT  = 3
 
 # sense radius
 SENSE = 15
@@ -16,9 +11,10 @@ SENSE = 15
 class rabbit(animal):
    
     # constructor
-    def __init__(self, surface, movementspeed):
+    def __init__(self, surface, movementspeed, id):
         animal.__init__(self, surface, movementspeed)
         self.colour = WHITE
+        self.id = id
     
     #find nearest food
     def seek(self, food):
@@ -27,10 +23,18 @@ class rabbit(animal):
         if self.wandering == False:
             self.path = self.createPath(self.closest)
             self.path.reverse()
-            print("FOUND")
+            self.path = self.newPath()
         elif self.wandering == True:
-            print("searching..")
             return
+
+    def newPath(self):
+        newPath = []
+        temp = math.floor(len(self.path)/self.ms)
+        for i in range(temp):
+            newPath.append(self.path[i*self.ms])
+        newPath.append(self.path.pop())
+        return newPath
+
     # scan for closest food
     def scan(self, food):
 
