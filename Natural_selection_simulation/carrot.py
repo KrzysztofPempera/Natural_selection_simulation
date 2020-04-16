@@ -19,7 +19,7 @@ class carrot(object):
 
     # get carrots position
     def getPosition(self):
-        return (self.posX, self.posY)
+        return self.posX, self.posY
 
     # draw carrot
     def draw(self):

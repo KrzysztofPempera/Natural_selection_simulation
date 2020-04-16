@@ -6,12 +6,12 @@ from colours import *
 # screen size and game speed
 WIDTH      = 400
 HEIGHT     = 400
-SPEED      = 50
+SPEED      = 30
 MOVEMENT_SPEED = 2
 
 # declare food positions array
-foodPositionX = []
-foodPositionY = []
+food = []
+#foodPosition = [[-1 for i in range (400)] for j in range(400)]
 
 pg.init()
 
@@ -20,11 +20,14 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
+
 # set up food and rabbit
-food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
+for i in range (400):
+    food.append(crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11))
+#    foodPosition[food[i].posX][food[i].posY] = i
 #food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
 #rabbits = [rb.rabbit(screen, 200, 200, MOVEMENT_SPEED) for i in range (10)]
-rabbits = [rb.rabbit(screen, 200, 200, MOVEMENT_SPEED) for i in range (5)]
+rabbits = [rb.rabbit(screen, MOVEMENT_SPEED) for i in range (100)]
 
 # draw screen with objects 
 def drawScreen(surface):
@@ -47,21 +50,24 @@ while running:
     drawScreen(screen)
 
     # move rabbits
-    for i in range(len(rabbits)):
-        rabbits[i].move()
-        if rabbits[i].getWandering() == True:
-            rabbits[i].seek(food)
+    for rabbit in rabbits:
+        rabbit.move()
+        if rabbit.getWandering() == True:
+            rabbit.seek(food)
+        elif rabbit.getEat() == True:
+            for carrot in food:
+                if rabbit.getPosition() == carrot.getPosition():
+                    food.remove(carrot)
+                    break
+            rabbit.eat = False
+            rabbit.wandering = True
 
-    #if rabbit.eat == True:
-    #    food.remove(food[rabbit.getPosition()])
-    #    rabbit.eat = False
-    #    print('deleted')
-    #eating to fix
-    for carrot in food:
-        for rabbit in rabbits:
-            if rabbit.getPosition() == carrot.getPosition():
-                food.remove(carrot)
-                print('deleted')
+            #temp = rabbit.getPosition()
+            #eat = foodPosition[temp[0]][temp[1]]
+            #food.pop(eat)
+            #foodPosition[temp[0]][temp[1]] = -1
+            #rabbit.eat = False
+            #rabbit.wandering = True
 
     # quit
     for event in pg.event.get():
