@@ -48,11 +48,13 @@ while running:
 
     for wolf in wolfs:
         wolf.move()
+        wolf.checkTarget()
         if wolf.getWandering() == True:
             wolf.seek(rabbits)
 
         eat = wolf.rect.collidelist(rabbits)
         if eat != -1:
+            rabbits[eat].setEaten = True
             rabbits.pop(eat)
 
     # move rabbits

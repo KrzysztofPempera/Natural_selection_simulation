@@ -97,10 +97,10 @@ class animal(object):
 
         #find nearest food
     def seek(self, targets):
-        self.closest = self.scan(targets)
+        self.target = self.scan(targets)
 
         if self.wandering == False:
-            self.path = self.createPath(self.closest)
+            self.path = self.createPath(self.target.getPosition())
             self.path.reverse()
             if self.path:
                 self.path = self.newPath()
@@ -125,8 +125,7 @@ class animal(object):
             
             if self.targetDistance <= self.sense:
                 self.wandering = False
-                self.target = target
-                return targetPosition
+                return target
         return
   
     # move animal

@@ -21,7 +21,11 @@ class rabbit(animal):
         self.colour = WHITE
         self.id = id
         self.sense = SENSE
+        self.eaten = False
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     
+        def getEaten(self):
+            return self.eaten
 
-
+        def setEaten(self, bool):
+            self.eaten = bool

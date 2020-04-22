@@ -19,5 +19,13 @@ class wolf(animal):
         self.sense = SENSE
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
         
+    def checkTarget(self):
+        if self.wandering == False:
+            if self.target.eaten == True:
+                self.wandering = True
 
-
+            elif self.path and self.target.getPosition() != self.path[-1]:
+                self.path = self.createPath(self.target.getPosition())
+                self.path.reverse()
+                if self.path:
+                    self.path = self.newPath()
