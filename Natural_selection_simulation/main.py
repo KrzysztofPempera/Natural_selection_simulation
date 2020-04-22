@@ -7,7 +7,7 @@ from colours import *
 # screen size and game speed
 WIDTH      = 400
 HEIGHT     = 400
-SPEED      = 30
+SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 2
 WOLF_MOVEMENT_SPEED = 3
 # declare food positions array
@@ -28,8 +28,8 @@ for i in range (400):
 #    foodPosition[food[i].posX][food[i].posY] = i
 #food = [crt.carrot(screen, 170, 230, 170 , 230) for i in range (5)]
 #rabbits = [rb.rabbit(screen, 200, 200, MOVEMENT_SPEED) for i in range (10)]
-rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, id = i) for i in range (10)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (2)]
+rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, id = i) for i in range (25)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (1)]
 
 # draw screen with objects 
 def drawScreen(surface):
@@ -42,7 +42,7 @@ def drawScreen(surface):
     for wolf in wolfs:
         wolf.draw()
 
-    pg.display.flip()  
+    pg.display.update()  
 
 running = True
 while running:
@@ -53,35 +53,37 @@ while running:
     # draw food, rabbit, screen
     drawScreen(screen)
 
+    for wolf in wolfs:
+        wolf.move()
+        if wolf.getWandering() == True:
+            wolf.seek(rabbits)
+        #elif wolf.getEat() == True:
+        #    if wolf.getPosition() == wolf.target.getPosition():
+        #        rabbits.remove(wolf.target)
+        #    wolf.eat = False
+        #    wolf.wandering = True
+        #    wolf.target = -1
+        eat = wolf.rect.collidelist(rabbits)
+        if eat != -1:
+            rabbits.pop(eat)
     # move rabbits
     for rabbit in rabbits:
         rabbit.move()
         if rabbit.getWandering() == True:
             rabbit.seek(food)
-        elif rabbit.getEat() == True:
-            for carrot in food:
-                if rabbit.getPosition() == carrot.getPosition():
-                    food.remove(carrot)
-                    break
-            rabbit.eat = False
-            rabbit.wandering = True
-
-    for wolf in wolfs:
-        wolf.move()
-        if wolf.getWandering() == True:
-            wolf.seek(rabbits)
-        elif wolf.getEat() == True:
-            if wolf.getPosition() == rabbits[wolf.target].getPosition():
-                rabbits.pop(wolf.target)
-            wolf.eat = False
-            wolf.wandering = True
-            wolf.target = -1
-            #temp = rabbit.getPosition()
-            #eat = foodPosition[temp[0]][temp[1]]
-            #food.pop(eat)
-            #foodPosition[temp[0]][temp[1]] = -1
+        #elif rabbit.getEat() == True:
+        #    for carrot in food:
+        #        if rabbit.getPosition() == carrot.getPosition():
+        #            food.remove(carrot)
+        #            break
             #rabbit.eat = False
-            #rabbit.wandering = True
+        eat = rabbit.rect.collidelist(food)
+        if eat != -1:
+            food.pop(eat)
+        #for carrot in food:
+        #    if rabbit.getPosition() == carrot.getPosition():
+        #        food.pop(food.index(carrot))
+        #        break
 
     # quit
     for event in pg.event.get():

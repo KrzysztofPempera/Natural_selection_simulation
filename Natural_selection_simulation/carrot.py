@@ -16,6 +16,7 @@ class carrot(object):
         self.posY = rnd.randint(minY, maxY - 1)
 
         self.colour = ORANGE
+        self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
 
     # get carrots position
     def getPosition(self):
@@ -25,6 +26,4 @@ class carrot(object):
     def draw(self):
         sur = self.surface
 
-        cPosition = self.getPosition()
-
-        pg.draw.rect(sur,self.colour,(cPosition[0],cPosition[1],BLOCK_SIZE,BLOCK_SIZE))
+        pg.draw.rect(sur,self.colour,self.rect)

@@ -7,6 +7,7 @@ from colours import *
 # sense radius
 SENSE = 15
 
+
 # rabbit class definition
 class rabbit(animal):
    
@@ -15,6 +16,7 @@ class rabbit(animal):
         animal.__init__(self, surface, movementspeed)
         self.colour = WHITE
         self.id = id
+  
     
     #find nearest food
     def seek(self, food):
@@ -23,7 +25,8 @@ class rabbit(animal):
         if self.wandering == False:
             self.path = self.createPath(self.closest)
             self.path.reverse()
-            self.path = self.newPath()
+            if self.path:
+                self.path = self.newPath()
         elif self.wandering == True:
             return
 
@@ -44,7 +47,7 @@ class rabbit(animal):
             cPositionY = carrot.posY
             self.targetDistance = self.calculateDistance(rPosition[0], rPosition[1],cPositionX, cPositionY)
             
-            if self.targetDistance == SENSE:
+            if self.targetDistance <= SENSE:
                 self.wandering = False
                 return cPositionX,cPositionY
         return

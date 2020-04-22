@@ -1,8 +1,9 @@
 import pygame as pg
 from animal import animal
 from colours import *
+from rabbit import rabbit
 
-SENSE = 100
+SENSE = 30
 
 class wolf(animal):
     
@@ -12,7 +13,7 @@ class wolf(animal):
         self.colour = RED
         self.posX = 200
         self.posY = 200
-        self.target = -1 
+        self.target = rabbit
     
     #find nearest food
     def seek(self, food):
@@ -33,9 +34,9 @@ class wolf(animal):
             rPositionY = rabbit.posY
             self.targetDistance = self.calculateDistance(rPosition[0], rPosition[1],rPositionX, rPositionY)
             
-            if self.targetDistance == SENSE:
+            if self.targetDistance <= SENSE:
                 self.wandering = False
-                target = rabbit.id
+                self.target = rabbit
                 return rPositionX,rPositionY
         return
 

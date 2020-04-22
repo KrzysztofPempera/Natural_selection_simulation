@@ -5,8 +5,6 @@ import heapq
 import math
 from colours import *
 
-# block size
-BLOCK_SIZE = 10
 
 # motion direction constants
 UP    = 0
@@ -14,6 +12,8 @@ RIGHT = 1
 DOWN  = 2
 LEFT  = 3
 
+# block size
+BLOCK_SIZE = 10
 
 class animal(object):
 # constructor
@@ -21,12 +21,13 @@ class animal(object):
         self.surface = surface
         self.posX = rnd.randint(0, 380)
         self.posY = rnd.randint(0, 380)
+        self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
         self.ms = movementspeed
         self.wandering = True
         self.eat = False
         self.path = []
         self.targetDistance = 0
-        self.oldPosition = (-1,self.posY)
+        self.oldPosition = (-1,-1)
     
     # function to calculate distance between two points
     def calculateDistance(self,x1,y1,x2,y2):  
@@ -102,24 +103,25 @@ class animal(object):
     def move(self):
         if self.wandering == True:
             self.dir = self.wander()
-            self.posX = self.dir[0]
-            self.posY = self.dir[1]
-            self.posY = self.posY % 400
-            self.posX = self.posX % 400
-
+            self.posX = self.dir[0] % 400
+            self.posY = self.dir[1] % 400
+            self.rect.x = self.posX
+            self.rect.y = self.posY
+            
         elif self.wandering == False:
             if self.path:
                 self.nextMove = self.path.pop(0)
                 self.posX = self.nextMove[0]
                 self.posY = self.nextMove[1]
+                self.rect.x = self.posX
+                self.rect.y = self.posY
             else:
                 self.eat = True
+                self.wandering = True
         
     # draw animal    
     def draw(self):
         sur = self.surface
-
-        rPosition = self.getPosition()
-
-        pg.draw.rect(sur,self.colour,(rPosition[0],rPosition[1],BLOCK_SIZE,BLOCK_SIZE))
+        rect = self.rect 
+        pg.draw.rect(sur, self.colour, rect)
 
