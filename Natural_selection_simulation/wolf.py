@@ -5,6 +5,9 @@ from rabbit import rabbit
 
 SENSE = 30
 
+# block size
+BLOCK_SIZE = 10
+
 class wolf(animal):
     
     # constructor
@@ -13,31 +16,8 @@ class wolf(animal):
         self.colour = RED
         self.posX = 200
         self.posY = 200
-        self.target = rabbit
-    
-    #find nearest food
-    def seek(self, food):
-        self.closest = self.scan(food)
-
-        if self.wandering == False:
-            self.path = self.createPath(self.closest)
-            self.path.reverse()
-        elif self.wandering == True:
-            return
-
-    # scan for closest food
-    def scan(self, rabbits):
-
-        rPosition = self.getPosition()
-        for rabbit in rabbits:
-            rPositionX = rabbit.posX
-            rPositionY = rabbit.posY
-            self.targetDistance = self.calculateDistance(rPosition[0], rPosition[1],rPositionX, rPositionY)
-            
-            if self.targetDistance <= SENSE:
-                self.wandering = False
-                self.target = rabbit
-                return rPositionX,rPositionY
-        return
+        self.sense = SENSE
+        self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
+        
 
 

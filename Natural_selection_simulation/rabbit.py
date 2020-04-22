@@ -1,12 +1,14 @@
 import pygame as pg
 import math
-
+import random as rnd
 from animal import animal
 from colours import *
 
 # sense radius
 SENSE = 15
 
+# block size
+BLOCK_SIZE = 9
 
 # rabbit class definition
 class rabbit(animal):
@@ -14,43 +16,12 @@ class rabbit(animal):
     # constructor
     def __init__(self, surface, movementspeed, id):
         animal.__init__(self, surface, movementspeed)
+        self.posX = rnd.randint(0, 380)
+        self.posY = rnd.randint(0, 380)
         self.colour = WHITE
         self.id = id
-  
+        self.sense = SENSE
+        self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     
-    #find nearest food
-    def seek(self, food):
-        self.closest = self.scan(food)
-
-        if self.wandering == False:
-            self.path = self.createPath(self.closest)
-            self.path.reverse()
-            if self.path:
-                self.path = self.newPath()
-        elif self.wandering == True:
-            return
-
-    def newPath(self):
-        newPath = []
-        temp = math.floor(len(self.path)/self.ms)
-        for i in range(temp):
-            newPath.append(self.path[i*self.ms])
-        newPath.append(self.path.pop())
-        return newPath
-
-    # scan for closest food
-    def scan(self, food):
-
-        rPosition = self.getPosition()
-        for carrot in food:
-            cPositionX = carrot.posX
-            cPositionY = carrot.posY
-            self.targetDistance = self.calculateDistance(rPosition[0], rPosition[1],cPositionX, cPositionY)
-            
-            if self.targetDistance <= SENSE:
-                self.wandering = False
-                return cPositionX,cPositionY
-        return
-  
 
 

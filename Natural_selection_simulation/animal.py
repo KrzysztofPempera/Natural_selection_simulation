@@ -12,21 +12,17 @@ RIGHT = 1
 DOWN  = 2
 LEFT  = 3
 
-# block size
-BLOCK_SIZE = 10
 
 class animal(object):
 # constructor
     def __init__(self, surface, movementspeed):
         self.surface = surface
-        self.posX = rnd.randint(0, 380)
-        self.posY = rnd.randint(0, 380)
-        self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
         self.ms = movementspeed
         self.wandering = True
         self.eat = False
         self.path = []
         self.targetDistance = 0
+        self.target = object
         self.oldPosition = (-1,-1)
     
     # function to calculate distance between two points
@@ -36,7 +32,7 @@ class animal(object):
 
     # get animal position
     def getPosition(self):
-        return self.posX, self.posY
+        return self.rect.x, self.rect.y
 
     # get rabbits status
     def getWandering(self):
@@ -94,27 +90,58 @@ class animal(object):
             return self.wander()
             
     def getNewPosition(self, position):
-        moves = ((0,self.ms),(0,-self.ms),(self.ms,0),(-self.ms,0))
-        nextMove = moves[rnd.randint(0,3)]
+        moves = ((0,self.ms),(0,-self.ms),(self.ms,0),(-self.ms,0), (self.ms,self.ms), (self.ms,-self.ms), (-self.ms,self.ms), (-self.ms,-self.ms))
+        nextMove = moves[rnd.randrange(len(moves))]
         newPosition = (position[0] + nextMove[0],position[1] + nextMove[1])
         return newPosition
 
+        #find nearest food
+    def seek(self, targets):
+        self.closest = self.scan(targets)
+
+        if self.wandering == False:
+            self.path = self.createPath(self.closest)
+            self.path.reverse()
+            if self.path:
+                self.path = self.newPath()
+        elif self.wandering == True:
+            return
+
+    def newPath(self):
+        newPath = []
+        temp = math.floor(len(self.path)/self.ms)
+        for i in range(temp):
+            newPath.append(self.path[i*self.ms])
+        newPath.append(self.path.pop())
+        return newPath
+
+    # scan for closest food
+    def scan(self, targets):
+
+        aPosition = self.getPosition()
+        for target in targets:
+            targetPosition = target.rect.center
+            self.targetDistance = self.heuristic(aPosition, targetPosition)
+            
+            if self.targetDistance <= self.sense:
+                self.wandering = False
+                self.target = target
+                return targetPosition
+        return
+  
     # move animal
     def move(self):
         if self.wandering == True:
             self.dir = self.wander()
-            self.posX = self.dir[0] % 400
-            self.posY = self.dir[1] % 400
-            self.rect.x = self.posX
-            self.rect.y = self.posY
+            self.rect.x = self.dir[0] % 400
+            self.rect.y = self.dir[1] % 400
             
         elif self.wandering == False:
             if self.path:
                 self.nextMove = self.path.pop(0)
-                self.posX = self.nextMove[0]
-                self.posY = self.nextMove[1]
-                self.rect.x = self.posX
-                self.rect.y = self.posY
+                self.rect.x = self.nextMove[0]
+                self.rect.y = self.nextMove[1]
+
             else:
                 self.eat = True
                 self.wandering = True
