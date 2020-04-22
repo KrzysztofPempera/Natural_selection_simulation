@@ -22,7 +22,7 @@ pg.display.set_caption('Simulation')
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
 rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, id = i) for i in range (30)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (3)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (5)]
 
 # draw screen with objects 
 def drawScreen(surface):

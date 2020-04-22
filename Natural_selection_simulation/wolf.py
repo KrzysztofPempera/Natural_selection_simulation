@@ -3,7 +3,7 @@ from animal import animal
 from colours import *
 from rabbit import rabbit
 
-SENSE = 30
+SENSE = 20
 
 # block size
 BLOCK_SIZE = 10
