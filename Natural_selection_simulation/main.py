@@ -7,7 +7,7 @@ from colours import *
 # screen size and game speed
 WIDTH      = 400
 HEIGHT     = 400
-SPEED      = 30
+SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 3
 WOLF_MOVEMENT_SPEED = 2
 
@@ -19,10 +19,15 @@ screen = pg.display.set_mode([WIDTH, HEIGHT])
 pg.display.set_caption('Simulation')
 
 #set up food and animals
+turn = 1
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
 rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, id = i) for i in range (30)]
 wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (5)]
+
+def createFood(value):
+    for i in range(value):
+        food.append(crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11))
 
 # draw screen with objects 
 def drawScreen(surface):
@@ -43,6 +48,12 @@ while running:
     # game speed
     clock.tick(SPEED)
 
+    turn += 1
+
+    if turn%100 == 0:
+        createFood(100)
+
+    print(turn)
     # draw food, rabbit, screen
     drawScreen(screen)
 
