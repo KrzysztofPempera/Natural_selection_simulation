@@ -15,8 +15,9 @@ LEFT  = 3
 
 class animal(object):
 # constructor
-    def __init__(self, surface, movementspeed):
+    def __init__(self, surface, movementspeed, sense):
         self.surface = surface
+        self.sense = sense
         self.ms = movementspeed
         self.eat = False
         self.wandering = True
@@ -130,12 +131,13 @@ class animal(object):
                 return target
         return
 
+    def mutate():
 
     def reproduce(self, referenceList, animal):
         print('reproduce')
         self.energy = math.floor(self.energy*0.75)
         aPosition = self.getPosition()
-        referenceList.append(animal(self.surface, self.ms, aPosition[0], aPosition[1]))
+        referenceList.append(animal(self.surface, self.ms, aPosition[0], aPosition[1], self.sense))
 
     # move animal
     def move(self):
