@@ -26,5 +26,3 @@ class rabbit(animal):
         def getEaten(self):
             return self.eaten
 
-        def setEaten(self, bool):
-            self.eaten = bool

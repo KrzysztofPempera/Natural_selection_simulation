@@ -10,7 +10,7 @@ WIDTH      = 400
 HEIGHT     = 400
 SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 3
-WOLF_MOVEMENT_SPEED = 3
+WOLF_MOVEMENT_SPEED = 4
 WOLF_SENSE = 40
 RABBIT_SENSE = 15
 
@@ -26,7 +26,7 @@ turn = 1
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
 rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (40)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (4)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (5)]
 
 def createFood(value):
     for i in range(value):
@@ -67,15 +67,13 @@ while running:
             wolf.reproduce(wolfs, wlf.wolf)
 
         wolf.move()
-        wolf.trail += 1
-        wolf.checkTarget()
 
         if wolf.getWandering() == True:
             wolf.seek(rabbits)
 
         eat = wolf.rect.collidelist(rabbits)
         if eat != -1:
-            rabbits[eat].setEaten = True
+            rabbits[eat].eaten = True
             wolf.energy += rabbits[eat].energyRep
             if wolf.energy > wolf.maxEnergy:
                 wolf.energy = wolf.maxEnergy
