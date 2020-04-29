@@ -63,10 +63,14 @@ while running:
             continue
         elif wolf.energy > 0.75*wolf.maxEnergy:
             wolf.reproduce(wolfs, wlf.wolf)
+
         wolf.move()
+        wolf.trail += 1
         wolf.checkTarget()
+
         if wolf.getWandering() == True:
             wolf.seek(rabbits)
+
         eat = wolf.rect.collidelist(rabbits)
         if eat != -1:
             rabbits[eat].setEaten = True
@@ -77,11 +81,12 @@ while running:
 
     # move rabbits
     for rabbit in rabbits:
-        rabbit.age += 1
+        #rabbit.age += 1
         #if rabbit.age > rabbit.maxAge:
         #    rabbits.remove(rabbit)
         #    continue
         if rabbit.energy <= 0:
+            rabbit.setEaten = True
             rabbits.remove(rabbit)
             continue
         elif rabbit.energy > 0.50*rabbit.maxEnergy:

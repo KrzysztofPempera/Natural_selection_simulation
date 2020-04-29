@@ -3,7 +3,7 @@ from animal import animal
 from colours import *
 from rabbit import rabbit
 
-SENSE = 35
+SENSE = 40
 
 # block size
 BLOCK_SIZE = 10
@@ -16,8 +16,9 @@ class wolf(animal):
         self.colour = RED
         self.posX = posx
         self.posY = posy
-        self.energy = 1000
-        self.maxEnergy = 1500
+        self.trail = 0
+        self.energy = 500
+        self.maxEnergy = 1000
         self.sense = SENSE
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
         
@@ -26,7 +27,8 @@ class wolf(animal):
             if self.target.eaten == True:
                 self.wandering = True
 
-            elif self.path and self.target.getPosition() != self.path[-1]:
+            elif self.path and self.trail >= 6 and self.target.getPosition() != self.path[-1]:
+                self.trail = 0
                 self.path = self.createPath(self.target.getPosition())
                 self.path.reverse()
                 if self.path:
