@@ -5,6 +5,7 @@ import heapq
 import math
 from colours import *
 
+MUTATION_THRESHOLD = 0.5
 
 # motion direction constants
 UP    = 0
@@ -131,13 +132,22 @@ class animal(object):
                 return target
         return
 
-    def mutate():
+    def mutate(self, parameter):
+        mutationPosibilities = [1,-1]
+        ifMutate = rnd.uniform(0,1)
+        if ifMutate < MUTATION_THRESHOLD:
+            print('mutate')
+            parameter += rnd.choice(mutationPosibilities)
+        return parameter
 
     def reproduce(self, referenceList, animal):
-        print('reproduce')
         self.energy = math.floor(self.energy*0.75)
         aPosition = self.getPosition()
-        referenceList.append(animal(self.surface, self.ms, aPosition[0], aPosition[1], self.sense))
+        newMs = self.mutate(self.ms)
+        if newMs <= 0:
+            newMs = 1
+        newSense = self.mutate(self.sense)
+        referenceList.append(animal(self.surface, newMs, aPosition[0], aPosition[1], newSense))
 
     # move animal
     def move(self):
