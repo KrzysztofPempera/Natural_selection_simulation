@@ -10,7 +10,7 @@ WIDTH      = 400
 HEIGHT     = 400
 SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 3
-WOLF_MOVEMENT_SPEED = 2
+WOLF_MOVEMENT_SPEED = 3
 
 pg.init()
 
@@ -23,8 +23,8 @@ pg.display.set_caption('Simulation')
 turn = 1
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
-rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380)) for i in range (1)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED) for i in range (0)]
+rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380)) for i in range (40)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200) for i in range (4)]
 
 def createFood(value):
     for i in range(value):
@@ -52,12 +52,17 @@ while running:
     turn += 1
 
     if turn%100 == 0:
-        createFood(100)
+        createFood(200)
 
     # draw food, rabbit, screen
     drawScreen(screen)
 
     for wolf in wolfs:
+        if wolf.energy <= 0:
+            wolfs.remove(wolf)
+            continue
+        elif wolf.energy > 0.75*wolf.maxEnergy:
+            wolf.reproduce(wolfs, wlf.wolf)
         wolf.move()
         wolf.checkTarget()
         if wolf.getWandering() == True:
@@ -65,6 +70,9 @@ while running:
         eat = wolf.rect.collidelist(rabbits)
         if eat != -1:
             rabbits[eat].setEaten = True
+            wolf.energy += rabbits[eat].energyRep
+            if wolf.energy > wolf.maxEnergy:
+                wolf.energy = wolf.maxEnergy
             rabbits.pop(eat)
 
     # move rabbits
@@ -76,16 +84,15 @@ while running:
         if rabbit.energy <= 0:
             rabbits.remove(rabbit)
             continue
-        elif rabbit.energy > 0.75*rabbit.maxEnergy:
+        elif rabbit.energy > 0.50*rabbit.maxEnergy:
             rabbit.reproduce(rabbits, rb.rabbit)
-        print(rabbit.energy)
         rabbit.move()
         if rabbit.getWandering() == True:
             rabbit.seek(food)
 
         eat = rabbit.rect.collidelist(food)
         if eat != -1:
-            rabbit.energy += food[eat].energy
+            rabbit.energy += food[eat].energyRep
             if rabbit.energy > rabbit.maxEnergy:
                 rabbit.energy = rabbit.maxEnergy
             food.pop(eat)

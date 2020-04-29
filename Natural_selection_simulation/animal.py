@@ -18,14 +18,14 @@ class animal(object):
     def __init__(self, surface, movementspeed):
         self.surface = surface
         self.ms = movementspeed
+        self.eat = False
         self.wandering = True
         self.path = []
         self.targetDistance = 0
         self.target = object
         self.oldPosition = (-1,-1)
         self.age = 0
-        self.energy = 150
-        self.maxEnergy = 300
+
     
     # function to calculate distance between two points
     def calculateDistance(self,x1,y1,x2,y2):  
@@ -133,7 +133,7 @@ class animal(object):
 
     def reproduce(self, referenceList, animal):
         print('reproduce')
-        self.energy = math.floor(self.energy*0.5)
+        self.energy = math.floor(self.energy*0.75)
         aPosition = self.getPosition()
         referenceList.append(animal(self.surface, self.ms, aPosition[0], aPosition[1]))
 
@@ -151,6 +151,7 @@ class animal(object):
                 self.rect.y = self.nextMove[1]
 
             else:
+                self.eat = True
                 self.wandering = True
         self.energy -= self.ms
         
