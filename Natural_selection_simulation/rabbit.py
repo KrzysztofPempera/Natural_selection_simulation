@@ -14,14 +14,14 @@ BLOCK_SIZE = 9
 class rabbit(animal):
    
     # constructor
-    def __init__(self, surface, movementspeed, id):
+    def __init__(self, surface, movementspeed, posx, posy):
         animal.__init__(self, surface, movementspeed)
-        self.posX = rnd.randint(0, 380)
-        self.posY = rnd.randint(0, 380)
+        self.posX = posx
+        self.posY = posy
         self.colour = WHITE
-        self.id = id
         self.sense = SENSE
         self.eaten = False
+        self.maxAge = 200
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     
         def getEaten(self):
