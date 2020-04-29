@@ -11,6 +11,8 @@ HEIGHT     = 400
 SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 3
 WOLF_MOVEMENT_SPEED = 3
+WOLF_SENSE = 40
+RABBIT_SENSE = 15
 
 pg.init()
 
@@ -23,8 +25,8 @@ pg.display.set_caption('Simulation')
 turn = 1
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
-rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380)) for i in range (40)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200) for i in range (4)]
+rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (40)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (4)]
 
 def createFood(value):
     for i in range(value):

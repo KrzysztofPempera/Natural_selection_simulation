@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\1\\source\\repos\\Natural_selection_simulation\\Natural_selection_simulation'],
+             pathex=['c:\\Users\\1\\source\\repos\\Natural_selection_simulation\\Natural_selection_simulation'],
              binaries=[],
              datas=[],
              hiddenimports=[],
