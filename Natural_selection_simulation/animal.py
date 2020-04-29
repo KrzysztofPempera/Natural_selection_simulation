@@ -22,7 +22,6 @@ class animal(object):
         self.wandering = True
         self.path = []
         self.targetDistance = 0
-        self.target = object
         self.oldPosition = (-1,-1)
         self.age = 0
 
@@ -126,6 +125,7 @@ class animal(object):
             self.targetDistance = self.heuristic(aPosition, targetPosition)
             
             if self.targetDistance <= self.sense:
+                self.target = target
                 self.wandering = False
                 return target
         return

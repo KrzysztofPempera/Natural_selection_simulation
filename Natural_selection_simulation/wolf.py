@@ -17,10 +17,19 @@ class wolf(animal):
         self.posX = posx
         self.posY = posy
         self.trail = 0
+        self.target = object
         self.energy = 500
         self.maxEnergy = 1000
         self.sense = SENSE
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
+
+    def seek(self, targets):
+        self.target = self.scan(targets)
+
+        #if self.wandering == False:
+
+        #elif self.wandering == True:
+        #    return
         
     def checkTarget(self):
         if self.wandering == False:
