@@ -25,8 +25,8 @@ pg.display.set_caption('Simulation')
 turn = 1
 
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
-rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (40)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (5)]
+rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (30)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (1)]
 
 def createFood(value):
     for i in range(value):
@@ -73,7 +73,7 @@ while running:
 
         eat = wolf.rect.collidelist(rabbits)
         if eat != -1:
-            rabbits[eat].eaten = True
+            rabbits[eat].dead = True
             wolf.energy += rabbits[eat].energyRep
             if wolf.energy > wolf.maxEnergy:
                 wolf.energy = wolf.maxEnergy
@@ -86,17 +86,20 @@ while running:
         #    rabbits.remove(rabbit)
         #    continue
         if rabbit.energy <= 0:
-            rabbit.setEaten = True
+            rabbit.dead = True
             rabbits.remove(rabbit)
             continue
         elif rabbit.energy > 0.50*rabbit.maxEnergy:
             rabbit.reproduce(rabbits, rb.rabbit)
+
         rabbit.move()
+
         if rabbit.getWandering() == True:
             rabbit.seek(food)
 
         eat = rabbit.rect.collidelist(food)
         if eat != -1:
+            food[eat].dead = True
             rabbit.energy += food[eat].energyRep
             if rabbit.energy > rabbit.maxEnergy:
                 rabbit.energy = rabbit.maxEnergy

@@ -14,6 +14,7 @@ class carrot(object):
         self.surface = surface
         self.colour = ORANGE
         self.energyRep = 30
+        self.dead = False
         self.rect = pg.Rect(rnd.randint(minX, maxX - 1), rnd.randint(minY, maxY - 1), BLOCK_SIZE, BLOCK_SIZE)
 
     # get carrots position

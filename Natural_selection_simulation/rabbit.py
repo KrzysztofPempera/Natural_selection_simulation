@@ -16,13 +16,10 @@ class rabbit(animal):
         self.posX = posx
         self.posY = posy
         self.colour = WHITE
-        self.eaten = False
+        self.dead = False
         self.energy = 150
         self.maxEnergy = 500
         self.energyRep = 150
         self.maxAge = 200
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     
-        def getEaten(self):
-            return self.eaten
-

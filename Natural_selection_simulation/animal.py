@@ -22,17 +22,13 @@ class animal(object):
         self.ms = movementspeed
         self.eat = False
         self.wandering = True
-        self.path = []
-        self.targetDistance = 0
+        self.velocity = (0,0)
+        self.target = object
+        self.destination = (0,0)
         self.oldPosition = (-1,-1)
         self.age = 0
 
-    
-    # function to calculate distance between two points
-    def calculateDistance(self,x1,y1,x2,y2):  
-        self.dist = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)  
-        return self.dist  
-
+   
     # get animal position
     def getPosition(self):
         return self.rect.x, self.rect.y
@@ -48,40 +44,6 @@ class animal(object):
     def heuristic(self,a, b):
         return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
 
-    # create path to set destination
-    def createPath(self, destination):
-        moves  = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(1,-1),(-1,1),(-1,-1)]
-        visited = set()
-        currentPath = {}
-        # movement cost from starting node to current/potential node
-        gScore = {self.getPosition():0}
-        # score for each node
-        fScore = {self.getPosition():self.heuristic(self.getPosition(),destination)}
-        oheap = []
-        heapq.heappush(oheap,(fScore[self.getPosition()],self.getPosition()))
-
-        while oheap:
-            current = heapq.heappop(oheap)[1]
-            if current == destination:
-                data = []
-                while current in currentPath:
-                    data.append(current)
-                    current = currentPath[current]
-                return data
-            visited.add(current)
-
-            for i,j in moves:
-                move = current[0] + i, current[1] + j
-                tempGScore = gScore [current] + self.heuristic(current,move)
-                if move in visited and tempGScore >= gScore.get(move,0):
-                    continue
-                if tempGScore < gScore.get(move,0) or move not in [i[1]for i in oheap]:
-                    currentPath[move] = current
-                    gScore[move] = tempGScore
-                    fScore[move] = tempGScore + self.heuristic(move,destination)
-                    heapq.heappush(oheap,(fScore[move],move))
-
-
     # choose wandering direction
     def wander(self):
         position = self.getPosition()
@@ -95,28 +57,49 @@ class animal(object):
     def getNewPosition(self, position):
         moves = ((0,self.ms),(0,-self.ms),(self.ms,0),(-self.ms,0), (self.ms,self.ms), (self.ms,-self.ms), (-self.ms,self.ms), (-self.ms,-self.ms))
         nextMove = moves[rnd.randrange(len(moves))]
+
         newPosition = (position[0] + nextMove[0],position[1] + nextMove[1])
         return newPosition
 
-        #find nearest food
-    def seek(self, targets):
-        self.target = self.scan(targets)
+    def mutate(self, parameter):
+        mutationPosibilities = [1,-1]
+        ifMutate = rnd.uniform(0,1)
 
-        if self.wandering == False:
-            self.path = self.createPath(self.target.getPosition())
-            self.path.reverse()
-            if self.path:
-                self.path = self.newPath()
-        elif self.wandering == True:
-            return
+        if ifMutate < MUTATION_THRESHOLD:   
+            parameter += rnd.choice(mutationPosibilities)
+        return parameter
 
-    def newPath(self):
-        newPath = []
-        temp = math.floor(len(self.path)/self.ms)
-        for i in range(temp):
-            newPath.append(self.path[i*self.ms])
-        newPath.append(self.path.pop())
-        return newPath
+    def reproduce(self, referenceList, animal):
+        self.energy = math.floor(self.energy*0.75)
+        aPosition = self.getPosition()
+
+        newMs = self.mutate(self.ms)
+        newSense = self.mutate(self.sense)
+
+        if newSense <=10:
+            newSense = 11
+        if newMs <= 0:
+            newMs = 1
+        print(newMs)
+        
+        referenceList.append(animal(self.surface, newMs, aPosition[0], aPosition[1], newSense))
+
+    def normalize(self,v):
+        norm = np.linalg.norm(v)
+        if norm == 0: 
+           return v
+        return v / norm
+
+    def createVelocity(self):
+        aPosition = self.getPosition()
+        tPosition = self.target.getPosition()
+
+        desired = np.subtract(tPosition,aPosition)
+
+        desired = self.normalize(desired)
+        desired = desired * self.ms
+        velocity = (math.ceil(desired[0]),math.ceil(desired[1]))
+        return velocity
 
     # scan for closest food
     def scan(self, targets):
@@ -124,32 +107,19 @@ class animal(object):
         aPosition = self.getPosition()
         for target in targets:
             targetPosition = target.rect.center
-            self.targetDistance = self.heuristic(aPosition, targetPosition)
+            targetDistance = self.heuristic(aPosition, targetPosition)
             
-            if self.targetDistance <= self.sense:
-                self.target = target
+            if targetDistance <= self.sense:
                 self.wandering = False
                 return target
         return
 
-    def mutate(self, parameter):
-        mutationPosibilities = [1,-1]
-        ifMutate = rnd.uniform(0,1)
-        if ifMutate < MUTATION_THRESHOLD:
-            print('mutate')
-            parameter += rnd.choice(mutationPosibilities)
-        return parameter
+    def seek(self, targets):
+        self.target = self.scan(targets)
+        if self.target:
+            self.destination = self.target.getPosition()
+            self.velocity = self.createVelocity()
 
-    def reproduce(self, referenceList, animal):
-        self.energy = math.floor(self.energy*0.75)
-        aPosition = self.getPosition()
-        newMs = self.mutate(self.ms)
-        if newMs <= 0:
-            newMs = 1
-        newSense = self.mutate(self.sense)
-        referenceList.append(animal(self.surface, newMs, aPosition[0], aPosition[1], newSense))
-
-    # move animal
     def move(self):
         if self.wandering == True:
             self.dir = self.wander()
@@ -157,16 +127,18 @@ class animal(object):
             self.rect.y = self.dir[1] % 400
             
         elif self.wandering == False:
-            if self.path:
-                self.nextMove = self.path.pop(0)
-                self.rect.x = self.nextMove[0]
-                self.rect.y = self.nextMove[1]
+            if self.target.dead == False:
+                if self.target.getPosition() != self.destination:
+                    self.velocity = self.createVelocity()
+                if self.velocity[0] + self.velocity[1] == 0:
+                    self.wandering = True
+                self.rect.x = (self.rect.x + self.velocity[0]) %400
+                self.rect.y = (self.rect.y + self.velocity[1]) %400
 
-            else:
-                self.eat = True
-                self.wandering = True
+            elif self.target.dead == True:
+                    self.wandering = True
         self.energy -= self.ms
-        
+
     # draw animal    
     def draw(self):
         sur = self.surface
