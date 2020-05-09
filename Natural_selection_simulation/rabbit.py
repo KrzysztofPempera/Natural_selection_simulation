@@ -18,8 +18,8 @@ class rabbit(animal):
         self.colour = WHITE
         self.dead = False
         self.energy = 150
-        self.maxEnergy = 500
-        self.energyRep = 150
+        self.maxEnergy = 700
+        self.energyRep = 200
         self.maxAge = 200
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     

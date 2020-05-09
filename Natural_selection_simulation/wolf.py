@@ -18,8 +18,5 @@ class wolf(animal):
         self.posY = posy
         self.trail = 0
         self.energy = 500
-        self.maxEnergy = 900
+        self.maxEnergy = 1500
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
-
-
-

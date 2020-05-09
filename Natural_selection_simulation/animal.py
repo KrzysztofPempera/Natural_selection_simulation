@@ -24,7 +24,6 @@ class animal(object):
         self.wandering = True
         self.velocity = (0,0)
         self.target = object
-        self.destination = (0,0)
         self.oldPosition = (-1,-1)
         self.age = 0
 
@@ -80,7 +79,6 @@ class animal(object):
             newSense = 11
         if newMs <= 0:
             newMs = 1
-        print(newMs)
         
         referenceList.append(animal(self.surface, newMs, aPosition[0], aPosition[1], newSense))
 
@@ -117,7 +115,6 @@ class animal(object):
     def seek(self, targets):
         self.target = self.scan(targets)
         if self.target:
-            self.destination = self.target.getPosition()
             self.velocity = self.createVelocity()
 
     def move(self):
@@ -128,15 +125,16 @@ class animal(object):
             
         elif self.wandering == False:
             if self.target.dead == False:
-                if self.target.getPosition() != self.destination:
-                    self.velocity = self.createVelocity()
-                if self.velocity[0] + self.velocity[1] == 0:
+                self.velocity = self.createVelocity()
+                if self.velocity.count(0) == len(self.velocity):
                     self.wandering = True
                 self.rect.x = (self.rect.x + self.velocity[0]) %400
                 self.rect.y = (self.rect.y + self.velocity[1]) %400
 
             elif self.target.dead == True:
                     self.wandering = True
+            else:
+                self.wandering = True
         self.energy -= self.ms
 
     # draw animal    

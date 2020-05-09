@@ -10,9 +10,10 @@ WIDTH      = 400
 HEIGHT     = 400
 SPEED      = 20
 RABBIT_MOVEMENT_SPEED = 3
-WOLF_MOVEMENT_SPEED = 4
-WOLF_SENSE = 40
-RABBIT_SENSE = 15
+WOLF_MOVEMENT_SPEED = 3
+WOLF_SENSE = 35
+RABBIT_SENSE = 17
+
 
 pg.init()
 
@@ -23,10 +24,9 @@ pg.display.set_caption('Simulation')
 
 #set up food and animals
 turn = 1
-
 food = [crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11) for i in range (400)]
-rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (30)]
-wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (1)]
+rabbits = [rb.rabbit(screen, RABBIT_MOVEMENT_SPEED, rnd.randint(0,380),rnd.randint(0,380), RABBIT_SENSE) for i in range (40)]
+wolfs = [wlf.wolf(screen, WOLF_MOVEMENT_SPEED, 200, 200, WOLF_SENSE) for i in range (4)]
 
 def createFood(value):
     for i in range(value):
@@ -59,11 +59,12 @@ while running:
     # draw food, rabbit, screen
     drawScreen(screen)
 
+
     for wolf in wolfs:
         if wolf.energy <= 0:
             wolfs.remove(wolf)
             continue
-        elif wolf.energy > 0.75*wolf.maxEnergy:
+        elif wolf.energy > 0.50*wolf.maxEnergy:
             wolf.reproduce(wolfs, wlf.wolf)
 
         wolf.move()
@@ -81,20 +82,16 @@ while running:
 
     # move rabbits
     for rabbit in rabbits:
-        #rabbit.age += 1
-        #if rabbit.age > rabbit.maxAge:
-        #    rabbits.remove(rabbit)
-        #    continue
+
         if rabbit.energy <= 0:
             rabbit.dead = True
             rabbits.remove(rabbit)
-            continue
         elif rabbit.energy > 0.50*rabbit.maxEnergy:
             rabbit.reproduce(rabbits, rb.rabbit)
 
         rabbit.move()
 
-        if rabbit.getWandering() == True:
+        if rabbit.wandering == True:
             rabbit.seek(food)
 
         eat = rabbit.rect.collidelist(food)
@@ -110,4 +107,5 @@ while running:
         if event.type == pg.QUIT:
             running = False 
             pg.quit()
-
+        if event.type == pg.KEYDOWN:
+            print("paused")
