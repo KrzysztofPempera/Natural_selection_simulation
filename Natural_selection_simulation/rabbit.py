@@ -3,6 +3,10 @@ import math
 import random as rnd
 from animal import animal
 from colours import *
+import json
+
+with open('para.json', 'r') as para:
+    config = json.load(para)
 
 # block size
 BLOCK_SIZE = 9
@@ -17,9 +21,10 @@ class rabbit(animal):
         self.posY = posy
         self.colour = WHITE
         self.dead = False
-        self.energy = 150
-        self.maxEnergy = 700
-        self.energyRep = 200
+        self.energy = config['RABBIT_ENERGY']
+        self.maxEnergy = config['RABBIT_MAX_ENERGY']
+        self.energyRep = config['RABBIT_ENERGY_REP']
+        self.reproduction = config['RABBIT_REPRODUCTION']
         self.maxAge = 200
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)
     

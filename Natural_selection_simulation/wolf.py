@@ -4,6 +4,10 @@ import numpy as np
 from animal import animal
 from colours import *
 from rabbit import rabbit
+import json
+
+with open('para.json', 'r') as para:
+    config = json.load(para)
 
 # block size
 BLOCK_SIZE = 10
@@ -17,6 +21,8 @@ class wolf(animal):
         self.posX = posx
         self.posY = posy
         self.trail = 0
-        self.energy = 500
-        self.maxEnergy = 1500
+        self.energy = config['WOLF_ENERGY']
+        self.maxEnergy = config['WOLF_MAX_ENERGY']
+        self.reproduction = config['WOLF_REPRODUCTION']
+        self.maxAge = config['WOLF_MAX_AGE']
         self.rect = pg.Rect(self.posX, self.posY, BLOCK_SIZE, BLOCK_SIZE)

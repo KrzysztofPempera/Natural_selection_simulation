@@ -30,6 +30,12 @@
     <Compile Include="colours.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="genetics.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="graph.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main.py" />
     <Compile Include="rabbit.py">
       <SubType>Code</SubType>
@@ -37,6 +43,11 @@
     <Compile Include="wolf.py">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="para.json" />
+    <Content Include="population.csv" />
+    <Content Include="report.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

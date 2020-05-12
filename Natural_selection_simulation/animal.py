@@ -3,7 +3,11 @@ import random as rnd
 import numpy as np
 import heapq
 import math
+import json
 from colours import *
+
+with open('para.json', 'r') as para:
+    config = json.load(para)
 
 MUTATION_THRESHOLD = 0.5
 
@@ -69,7 +73,7 @@ class animal(object):
         return parameter
 
     def reproduce(self, referenceList, animal):
-        self.energy = math.floor(self.energy*0.75)
+        self.energy = math.floor(self.energy*config['REPRODUCTION_COST'])
         aPosition = self.getPosition()
 
         newMs = self.mutate(self.ms)
