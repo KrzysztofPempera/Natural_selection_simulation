@@ -7,7 +7,7 @@ with open('para.json', 'r') as para:
     config = json.load(para)
 
 # block size
-BLOCK_SIZE = 8
+BLOCK_SIZE = 3
 
 # carrot class definition
 class carrot(object):

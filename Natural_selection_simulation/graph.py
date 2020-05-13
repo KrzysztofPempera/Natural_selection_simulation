@@ -10,4 +10,4 @@ def plot(wolfCount, rabbitCount, foodCount, id):
     plt.ylabel('Object count')
     plt.xlabel('Turn')
     plt.legend()
-    plt.savefig('plots/plot'+str(id)+'.png')
+    plt.savefig('plots/plot_'+str(id)+'.png')

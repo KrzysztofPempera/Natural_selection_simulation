@@ -9,7 +9,7 @@ with open('para.json', 'r') as para:
     config = json.load(para)
 
 # block size
-BLOCK_SIZE = 9
+BLOCK_SIZE = 4
 
 # rabbit class definition
 class rabbit(animal):

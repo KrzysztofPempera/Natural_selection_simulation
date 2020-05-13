@@ -7,7 +7,7 @@ import math as math
 import csv
 import json
 from colours import *
-from graph import plot
+#from graph import plot
 
 with open('para.json', 'r') as para:
     config = json.load(para)
@@ -108,13 +108,13 @@ def start():
                     rabbit.energy = rabbit.maxEnergy
                 food.pop(eat)
         
-        wolfCount.append(len(wolfs))
-        rabbitCount.append(len(rabbits))
-        foodCount.append(len(food))
-        print("Food count: ", len(food))
-        print("Rabbit count: ", len(rabbits))
-        print("Wolf count: ", len(wolfs))
-        print("time since start: ", math.floor(pg.time.get_ticks()/1000))
+        #wolfCount.append(len(wolfs))
+        #rabbitCount.append(len(rabbits))
+        #foodCount.append(len(food))
+        #print("Food count: ", len(food))
+        #print("Rabbit count: ", len(rabbits))
+        #print("Wolf count: ", len(wolfs))
+        #print("time since start: ", math.floor(pg.time.get_ticks()/1000))
         # quit
         if len(wolfs) == 0 or len(rabbits) == 0:
             running = False
@@ -122,7 +122,7 @@ def start():
             wolfCountRep = len(wolfs)
             rabbitCountRep = len(rabbits)
             pg.quit()
-            print("extinct")
+            #print("extinct")
             createReport(elapsedTime,wolfCountRep,rabbitCountRep)
-            plot(wolfCount, rabbitCount, foodCount, elapsedTime)
+            #plot(wolfCount, rabbitCount, foodCount, elapsedTime)
 start()
