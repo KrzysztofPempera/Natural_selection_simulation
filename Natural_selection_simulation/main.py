@@ -7,7 +7,7 @@ import math as math
 import csv
 import json
 from colours import *
-#from graph import plot
+from graph import plot
 
 with open('para.json', 'r') as para:
     config = json.load(para)
@@ -26,7 +26,8 @@ pg.init()
 
 # set up the drawing window
 clock = pg.time.Clock()
-screen = True
+screen = pg.display.set_mode([WIDTH, HEIGHT])
+pg.display.set_caption('Simulation')
 
 #set up food and animals
 turn = 1
@@ -37,6 +38,18 @@ wolfCount = []
 rabbitCount = []
 foodCount = []
 
+def drawScreen(surface):
+    surface.fill(GREEN_DARK)
+
+    for carrot in food:
+        carrot.draw()
+    for rabbit in rabbits:
+        rabbit.draw()
+    for wolf in wolfs:
+        wolf.draw()
+
+    pg.display.update() 
+
 def createFood(value):
     for i in range(value):
         food.append(crt.carrot(screen, 1, WIDTH - 11, 1, HEIGHT - 11))
@@ -46,9 +59,6 @@ def createReport(elapsedTime, wolfCount, rabbitCount):
         label = ['TURNS','TIME_BEFORE_EXTINCTION','RABBIT_MOVEMENT_SPEED', 'WOLF_MOVEMENT_SPEED', 'WOLF_SENSE', 'RABBIT_SENSE', 'CARROT_REP', 'WOLF_ENERGY', 'WOLF_MAX_ENERGY', 'WOLF_REPRODUCTION', 'WOLF_MAX_AGE', 'RABBIT_ENERGY', 'RABBIT_ENERGY_REP', 'RABBIT_MAX_ENERGY', 'RABBIT_REPRODUCTION', 'REPRODUCTION_COST', 'CARROT_ENERGY_REP', 'WOLF_COUNT', 'RABBIT_COUNT']
         theWriter = csv.DictWriter(csvfile, fieldnames=label)
         theWriter.writerow({'TURNS':turn,'TIME_BEFORE_EXTINCTION':elapsedTime,'RABBIT_MOVEMENT_SPEED':config['RABBIT_MOVEMENT_SPEED'], 'WOLF_MOVEMENT_SPEED':config['WOLF_MOVEMENT_SPEED'], 'WOLF_SENSE':config['WOLF_SENSE'], 'RABBIT_SENSE':config['RABBIT_SENSE'], 'CARROT_REP':config['CARROT_REP'], 'WOLF_ENERGY':config['WOLF_ENERGY'], 'WOLF_MAX_ENERGY':config['WOLF_MAX_ENERGY'], 'WOLF_REPRODUCTION':config['WOLF_REPRODUCTION'], 'WOLF_MAX_AGE':config['WOLF_MAX_AGE'], 'RABBIT_ENERGY':config['RABBIT_ENERGY'], 'RABBIT_ENERGY_REP':config['RABBIT_ENERGY_REP'], 'RABBIT_MAX_ENERGY':config['RABBIT_MAX_ENERGY'], 'RABBIT_REPRODUCTION':config['RABBIT_REPRODUCTION'], 'REPRODUCTION_COST':config['REPRODUCTION_COST'], 'CARROT_ENERGY_REP':config['CARROT_ENERGY_REP'],'WOLF_COUNT':wolfCount, 'RABBIT_COUNT':rabbitCount})
-
-def getCounts():
-    return wolfCount, rabbitCount, foodCount
 
 def start():
     global turn, CARROT_REP, wolfCount, rabbitCount, foodCount
@@ -62,6 +72,8 @@ def start():
         
         createFood(CARROT_REP)
 
+        # draw food, rabbit, screen
+        drawScreen(screen)
 
         for wolf in wolfs:
             if wolf.energy <= 0:
@@ -108,13 +120,14 @@ def start():
                     rabbit.energy = rabbit.maxEnergy
                 food.pop(eat)
         
-        #wolfCount.append(len(wolfs))
-        #rabbitCount.append(len(rabbits))
-        #foodCount.append(len(food))
+        wolfCount.append(len(wolfs))
+        rabbitCount.append(len(rabbits))
+        foodCount.append(len(food))
         #print("Food count: ", len(food))
         #print("Rabbit count: ", len(rabbits))
         #print("Wolf count: ", len(wolfs))
         #print("time since start: ", math.floor(pg.time.get_ticks()/1000))
+
         # quit
         if len(wolfs) == 0 or len(rabbits) == 0:
             running = False
@@ -122,7 +135,6 @@ def start():
             wolfCountRep = len(wolfs)
             rabbitCountRep = len(rabbits)
             pg.quit()
-            #print("extinct")
             createReport(elapsedTime,wolfCountRep,rabbitCountRep)
-            #plot(wolfCount, rabbitCount, foodCount, elapsedTime)
+            plot(wolfCount, rabbitCount, foodCount, elapsedTime)
 start()

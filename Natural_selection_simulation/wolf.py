@@ -10,7 +10,7 @@ with open('para.json', 'r') as para:
     config = json.load(para)
 
 # block size
-BLOCK_SIZE = 5
+BLOCK_SIZE = 10
 
 class wolf(animal):
     

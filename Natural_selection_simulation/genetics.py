@@ -12,6 +12,7 @@ with open('population.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         population.append(row)
+
 for row in population:
     print (row)
 

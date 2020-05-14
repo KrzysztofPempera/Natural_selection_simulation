@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>a5225657-6600-409c-84df-4738f6ba76ff</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>genetics.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
