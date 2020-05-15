@@ -84,24 +84,25 @@ def alg():
         with open('para.json', 'w') as f:
             json.dump(config, f)
 
-        for i in range  (1):
+        for i in range  (3):
             cmd = "C:\\Users\\1\\source\\repos\\Natural_selection_simulation\\Natural_selection_simulation\\main.exe"
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, creationflags=0x08000000)
+            process = subprocess.Popen(cmd,creationflags=0x08000000)
             process.wait()
     
         with open('result.csv', newline='') as csvfile:
             reader = csv.reader(csvfile)
             resultList = []
             for r in reader:
-                resultList.append(r)
+                resultList.append(int(r[0]))
         resultList = resultList[-3:]
         resultList.sort()
-        result = resultList[1]
+        result = [resultList[1]]
 
         with open('population.csv', 'a', newline='') as pop:
             row = (result+row)
             writer = csv.writer(pop)
             writer.writerow(row)
     
-for i in range(3):
+while True:
     alg()
+    print('next gen')

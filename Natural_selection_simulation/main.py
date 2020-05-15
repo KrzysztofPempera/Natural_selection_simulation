@@ -111,8 +111,7 @@ def start():
         foodCount.append(len(food))
 
         # quit
-        #if len(rabbits) == 0 or len(wolfs) == 0:
-        if turn == 20:
+        if len(rabbits) == 0 or len(wolfs) == 0:
             running = False
             elapsedTime = pg.time.get_ticks()
             wolfCountRep = len(wolfs)
